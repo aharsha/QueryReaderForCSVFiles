@@ -32,7 +32,7 @@ public class FetchCsvFile {
 				colindex++;
 			}
 
-			System.out.println(headerrow.firstRow);
+			//System.out.println(headerrow.firstRow);
 		}
 
 		return headerrow;
@@ -77,62 +77,7 @@ public class FetchCsvFile {
 		return dataSet;
 	}
 
-	public DataSet getAllRowsExperiment(Query query) throws Exception {
-		DataRow dataRow = null;
-		DataSet dataSet = new DataSet();
-		;
-		BufferedReader bufferedReader = new BufferedReader(new FileReader(query.getFilepath()));
-		HeaderRow headerRow = getHeaderRow(query);
-		LinkedHashMap<String,Integer> headerInfo=headerRow.getFirstRow();
-		int rowIndex = -1;
-		String lineData;
-		
-		while ( (lineData= bufferedReader.readLine()) != null) {
-			
-			System.out.println("lineData = "+lineData);
-			rowIndex++;
-			if (rowIndex == 0) {
-				continue;
-			}
-
-			String cellValues[] = lineData.split(",");
-			int columnIndex = 0;
-			dataRow = new DataRow();
-			String columnNames[]=query.getSelectColumns();
-			for(String columnName:columnNames)
-			{
-				
-				int key=0; 
-				
-				for( String key1 : headerInfo.keySet() )
-				{
-				if((columnName.equals(key1)))
-				{
-					System.out.println("column Index  = "+headerInfo.get(key1));
-				}
-				}
-				key++;
-			}
-			for (String cellValue : cellValues) {
-
-
-			
-
-				dataRow.cellData.put(columnIndex, cellValue);
-
-
-				//System.out.print(dataRow.rowData.get(columnIndex) + "\t \t");
-				columnIndex++;
-
-			}
-
-			dataSet.rowData.add(dataRow);
-			//System.out.println();
-		}
-
-		return dataSet;
-	}
-
+	
 	
 	
 	public List<Integer> columnIndexs(Query query)

@@ -25,7 +25,7 @@ public class TestQuery {
 	@BeforeClass
 	public static void intialise() throws Exception {
 
-		queryString = "select empid,empname from  d://employee.csv where empid=101 and empname='raju' order by empname";
+		queryString = "select * from  d://employee.csv where empid=101 and empname='raju' order by empname";
 		fetchCsv = new FetchCsvFile();
 		queryParser = new QueryParser();
 
@@ -33,7 +33,7 @@ public class TestQuery {
 		headerRow = fetchCsv.getHeaderRow(query);
 		headerInfo = headerRow.getFirstRow();
 		dataSet = fetchCsv.getAllRows(query);
-		columnIndexes = fetchCsv.columnIndexs(query);
+		// columnIndexes = fetchCsv.columnIndexs(query);
 		// dataSet = fetchCsv.getAllRowsExperiment(query);
 
 		expectedHeaders = new LinkedHashMap<String, Integer>();
@@ -49,7 +49,8 @@ public class TestQuery {
 
 	@Test
 	public void testCsvFileName() {
-		assertEquals("File Path is correct", "d://cn.csv", query.getFilepath());
+
+		assertEquals("File Path is ", "d://cn.csv", query.getFilepath());
 
 	}
 
@@ -61,7 +62,7 @@ public class TestQuery {
 
 	@Test
 	public void testHeaders() throws Exception {
-		assertEquals("File Headers are correct", expectedHeaders, actualHeaders);
+		assertEquals("File Headers ", expectedHeaders, actualHeaders);
 
 	}
 
@@ -89,45 +90,57 @@ public class TestQuery {
 
 	}
 
-	// @Test
-	// public void displayAllColumns() {
-	//
-	// List<DataRow> rowList = dataSet.getRowData();
-	//
-	//
-	// int x = 0;
-	//
-	// for (DataRow row : rowList) {
-	//
-	// LinkedHashMap<Integer, String> cellWithIndex = row.getCellData();
-	// int key = 0;
-	// for (; (cellWithIndex.get(key) != null);) {
-	//
-	// System.out.print(" " + cellWithIndex.get(key));
-	// key++;
-	// }
-	// System.out.println();
-	// }
-	//
-	// }
-	//
-	//
 	@Test
-	public void displaySpecificColumns() {
-
+	public void displayAllColumns() {
+		System.out.println("all columns data");
 		List<DataRow> rowList = dataSet.getRowData();
+
+		int x = 0;
 
 		for (DataRow row : rowList) {
 
 			LinkedHashMap<Integer, String> cellWithIndex = row.getCellData();
-for(int columnIndex:columnIndexes)
-{
-			System.out.print("  " + cellWithIndex.get(columnIndex));
-}
-System.out.println();
+			int key = 0;
+			for (; (cellWithIndex.get(key) != null);) {
+
+				System.out.print(" " + cellWithIndex.get(key));
+				key++;
+			}
+			System.out.println();
 		}
+
 	}
 
-	
+	@Test
+	public void displaySpecificColumns() {
+
+		System.out.println("specific columns data");
+		queryString = "select empid,empname from  d://employee.csv where empid=101 and empname='raju' order by empname";
+		fetchCsv = new FetchCsvFile();
+		queryParser = new QueryParser();
+
+		query = queryParser.parseQuery(queryString);
+		try {
+			headerRow = fetchCsv.getHeaderRow(query);
+
+			headerInfo = headerRow.getFirstRow();
+			dataSet = fetchCsv.getAllRows(query);
+			columnIndexes = fetchCsv.columnIndexs(query);
+
+			List<DataRow> rowList = dataSet.getRowData();
+
+			for (DataRow row : rowList) {
+
+				LinkedHashMap<Integer, String> cellWithIndex = row.getCellData();
+				for (int columnIndex : columnIndexes) {
+					System.out.print("  " + cellWithIndex.get(columnIndex));
+				}
+				System.out.println();
+			}
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
 
 }// class
