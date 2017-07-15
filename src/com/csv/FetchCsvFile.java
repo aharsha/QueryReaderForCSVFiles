@@ -1,87 +1,173 @@
 package com.csv;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
-
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class FetchCsvFile {
 
-	
 	public DataSet executeQuery(Query query) throws Exception {
-		
-		//based on query appropriate fetch method will call
-		//all fetch methods will store data in DataSet Object
-		//fetch methods not yet defined 
-		
+
+		// based on query appropriate fetch method will call
+		// all fetch methods will store data in DataSet Object
+		// fetch methods not yet defined
+
 		DataSet dataSet = new DataSet();
 
 		return dataSet;
 	}
 
-	public HeaderRow getHeaderRow(Query query) throws Exception
-	{
-		BufferedReader bufferreader=new BufferedReader(new FileReader(query.getFilepath()));
-		HeaderRow headerrow=new HeaderRow();
-		
-		if(bufferreader!=null)
-		{
-			String rowdata=bufferreader.readLine();
-			String rowvalues[]=rowdata.split(",");
-			int colindex=0;
-			for(String rowvalue:rowvalues)
-			{
-				headerrow.firstRow.put(rowvalue,colindex);
+	public HeaderRow getHeaderRow(Query query) throws Exception {
+		BufferedReader bufferreader = new BufferedReader(new FileReader(query.getFilepath()));
+		HeaderRow headerrow = new HeaderRow();
+
+		if (bufferreader != null) {
+			String rowdata = bufferreader.readLine();
+			String rowvalues[] = rowdata.split(",");
+			int colindex = 0;
+			for (String rowvalue : rowvalues) {
+				headerrow.firstRow.put(rowvalue, colindex);
 				colindex++;
 			}
-			
+
 			System.out.println(headerrow.firstRow);
 		}
-		
+
 		return headerrow;
 	}
-	
-	
-	public DataRow getAllRows(Query query) throws Exception
-	{
-		DataRow dataRow=null;
-		BufferedReader bufferedReader=new BufferedReader(new FileReader(query.getFilepath()));
-		HeaderRow headerRow=getHeaderRow(query);
-		int rowIndex=-1;
-		while(bufferedReader!=null)
-		{
-			String lineData=bufferedReader.readLine();
+
+	public DataSet getAllRows(Query query) throws Exception {
+		DataRow dataRow = null;
+		DataSet dataSet = new DataSet();
+		;
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(query.getFilepath()));
+		HeaderRow headerRow = getHeaderRow(query);
+		int rowIndex = -1;
+		String lineData;
+		
+		while ( (lineData= bufferedReader.readLine()) != null) {
+			
+			//System.out.println("lineData = "+lineData);
 			rowIndex++;
-			if(rowIndex==0)
-			{
+			if (rowIndex == 0) {
 				continue;
 			}
+
+			String cellValues[] = lineData.split(",");
+			int columnIndex = 0;
+			dataRow = new DataRow();
+			for (String cellValue : cellValues) {
+
 			
-			String rowValues[]=lineData.split(",");
-			int columnIndex=0;
+
+				dataRow.cellData.put(columnIndex, cellValue);
+
+
+				//System.out.print(dataRow.rowData.get(columnIndex) + "\t \t");
+				columnIndex++;
+
+			}
+
+			dataSet.rowData.add(dataRow);
+			//System.out.println();
+		}
+
+		return dataSet;
+	}
+
+	public DataSet getAllRowsExperiment(Query query) throws Exception {
+		DataRow dataRow = null;
+		DataSet dataSet = new DataSet();
+		;
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(query.getFilepath()));
+		HeaderRow headerRow = getHeaderRow(query);
+		LinkedHashMap<String,Integer> headerInfo=headerRow.getFirstRow();
+		int rowIndex = -1;
+		String lineData;
+		
+		while ( (lineData= bufferedReader.readLine()) != null) {
 			
-			for(String rowValue:rowValues)
+			System.out.println("lineData = "+lineData);
+			rowIndex++;
+			if (rowIndex == 0) {
+				continue;
+			}
+
+			String cellValues[] = lineData.split(",");
+			int columnIndex = 0;
+			dataRow = new DataRow();
+			String columnNames[]=query.getSelectColumns();
+			for(String columnName:columnNames)
 			{
 				
-				dataRow=new DataRow();
-				dataRow.rowData.put(columnIndex,rowValue);
-			//	System.out.print(headerRow.getFirstRow().get());
-				//System.out.println(columnIndex);
-				System.out.print(dataRow.rowData.get(columnIndex)+"\t \t");
-				columnIndex++;
-				//System.out.print(dataRow.rowData.get(columnIndex)+"\t");
-				//System.out.println(dataRow.rowData.get(1));
-				//System.out.println(dataRow.rowData.get(2));
-				//System.out.println(dataRow.rowData.get(3));
-				//System.out.println(headerRow.getFirstRow().get(rowValue));
+				int key=0; 
+				
+				for( String key1 : headerInfo.keySet() )
+				{
+				if((columnName.equals(key1)))
+				{
+					System.out.println("column Index  = "+headerInfo.get(key1));
+				}
+				}
+				key++;
 			}
+			for (String cellValue : cellValues) {
+
+
 			
-			//System.out.println(headerRow.firstRow);
-			System.out.println();
+
+				dataRow.cellData.put(columnIndex, cellValue);
+
+
+				//System.out.print(dataRow.rowData.get(columnIndex) + "\t \t");
+				columnIndex++;
+
+			}
+
+			dataSet.rowData.add(dataRow);
+			//System.out.println();
+		}
+
+		return dataSet;
+	}
+
+	
+	
+	public List<Integer> columnIndexs(Query query)
+	{
+		HeaderRow headerRow;
+		LinkedHashMap<String, Integer> headerInfo;
+		
+		String columnNames[] = query.getSelectColumns();
+		
+		List<Integer> selcttedColIndexes=new ArrayList();
+		
+		
+		try {
+			headerRow = getHeaderRow(query);
+			headerInfo = headerRow.getFirstRow();
+			
+		for (String columnName : columnNames) {
+			
+		
+			for (String key1 : headerInfo.keySet()) {
+				if ((columnName.equals(key1))) {
+					selcttedColIndexes.add(headerInfo.get(key1));
+				}
 		}
 		
-		return dataRow;
 	}
 	
+} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		return selcttedColIndexes;
+	}//method
+
+}//class
+
 	
-	
-	
-}
+

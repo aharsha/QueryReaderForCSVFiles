@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.annotation.Generated;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -15,19 +17,27 @@ public class TestQuery {
 	static HeaderRow headerRow;
 	static FetchCsvFile fetchCsv;
 	static String queryString;
+	static DataSet dataSet;
+	static List<Integer> columnIndexes;
+	static LinkedHashMap<String, Integer> headerInfo;
 	static LinkedHashMap<String, Integer> expectedHeaders, actualHeaders;
 
 	@BeforeClass
 	public static void intialise() throws Exception {
 
-		queryString = "select empid,empname from  d://cn.csv where empid=101 and empname='raju' order by empname";
+		queryString = "select empid,empname from  d://employee.csv where empid=101 and empname='raju' order by empname";
 		fetchCsv = new FetchCsvFile();
 		queryParser = new QueryParser();
 
 		query = queryParser.parseQuery(queryString);
 		headerRow = fetchCsv.getHeaderRow(query);
+		headerInfo = headerRow.getFirstRow();
+		dataSet = fetchCsv.getAllRows(query);
+		columnIndexes = fetchCsv.columnIndexs(query);
+		// dataSet = fetchCsv.getAllRowsExperiment(query);
 
 		expectedHeaders = new LinkedHashMap<String, Integer>();
+
 		expectedHeaders.put("empid", 0);
 		expectedHeaders.put("empname", 1);
 		expectedHeaders.put("empsal", 2);
@@ -79,10 +89,45 @@ public class TestQuery {
 
 	}
 
+	// @Test
+	// public void displayAllColumns() {
+	//
+	// List<DataRow> rowList = dataSet.getRowData();
+	//
+	//
+	// int x = 0;
+	//
+	// for (DataRow row : rowList) {
+	//
+	// LinkedHashMap<Integer, String> cellWithIndex = row.getCellData();
+	// int key = 0;
+	// for (; (cellWithIndex.get(key) != null);) {
+	//
+	// System.out.print(" " + cellWithIndex.get(key));
+	// key++;
+	// }
+	// System.out.println();
+	// }
+	//
+	// }
+	//
+	//
 	@Test
-	public void displayAllRows() throws Exception {
-fetchCsv.getAllRows(query);
-		
+	public void displaySpecificColumns() {
+
+		List<DataRow> rowList = dataSet.getRowData();
+
+		for (DataRow row : rowList) {
+
+			LinkedHashMap<Integer, String> cellWithIndex = row.getCellData();
+for(int columnIndex:columnIndexes)
+{
+			System.out.print("  " + cellWithIndex.get(columnIndex));
+}
+System.out.println();
+		}
 	}
+
+	
 
 }// class
