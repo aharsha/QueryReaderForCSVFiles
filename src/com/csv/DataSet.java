@@ -1,21 +1,19 @@
 package com.csv;
 import java.util.*;
-public class DataSet 
+
+public class DataSet
 {
-	List<DataRow> rowData=new ArrayList();
+	private List<DataRow> resultSet=new ArrayList();
 
-	public List<DataRow> getRowData() {
-		return rowData;
+	public List<DataRow> getResultSet() 
+	{
+		return resultSet;
 	}
 
-	public void setRowData(List<DataRow> rowData) {
-		this.rowData = rowData;
+	public void setResultSet(List<DataRow> resultSet) 
+	{
+		this.resultSet = resultSet;
 	}
-
 	
-
 	
-
-	
-
 }

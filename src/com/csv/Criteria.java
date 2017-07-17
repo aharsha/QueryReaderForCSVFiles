@@ -1,28 +1,41 @@
 package com.csv;
 
-
 public class Criteria {
+	private String column,operator,value;
+	
+	public String getColumn() 
+	{
+		return column;
+	}
 
-	String conditionColumnName,relationalOperator,conditionValue;
+	public void setColumn(String column) 
+	{
+		this.column = column;
+	}
+
+	public String getOperator() 
+	{
+		return operator;
+	}
+
+	public void setOperator(String operator) 
+	{
+		this.operator = operator;
+	}
+
+	public String getValue() 
+	{
+		return value;
+	}
+
+	public void setValue(String value) 
+	{
+		this.value = value;
+	}
 	
-	public String getConditionColumnName() {
-		return conditionColumnName;
+	public String toString()
+	{
+		return "Column:"+column+" Operator:"+operator+" Value:"+value;
 	}
-	public void setConditionColumnName(String conditionColumnName) {
-		this.conditionColumnName = conditionColumnName;
-	}
-	public String getRelationalOperator() {
-		return relationalOperator;
-	}
-	public void setRelationalOperator(String relationalOperator) {
-		this.relationalOperator = relationalOperator;
-	}
-	public String getConditionValue() {
-		return conditionValue;
-	}
-	public void setConditionValue(String conditionValue) {
-		this.conditionValue = conditionValue;
-	}
-	
-	
+
 }
