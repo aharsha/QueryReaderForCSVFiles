@@ -10,11 +10,20 @@ public class Query {
 	private String filePath;
 	private String orderByColumn,groupByColumn;
 	private SelectColumns columNames;
-	private List<Criteria> restrictions;
+	private List<Criteria> criteriaList;
+	
+
 	private boolean hasGroupBy=false,hasOrderBy=false,hasWhere=false,hasAllColumn=false,hasColumn=false,hasSimpleQuery,hasAggregate=false;
 	private List<String> logicalOperator;
 	private HeaderRow headerRow;
 	
+	public List<Criteria> getCriteriaList() {
+		return criteriaList;
+	}
+
+	public void setCriteriaList(List<Criteria> criteriaList) {
+		this.criteriaList = criteriaList;
+	}
 	public HeaderRow getHeaderRow() 
 	{
 		return headerRow;
@@ -32,13 +41,7 @@ public class Query {
 		this.columNames = columnNames;
 	}
 
-	public List<Criteria> getListrelexpr() {
-		return restrictions;
-	}
-
-	public void setListrelexpr(List<Criteria> listrelexpr) {
-		this.restrictions = listrelexpr;
-	}
+	
 
 	public String getOrderByColumn() 
 	{
@@ -48,7 +51,7 @@ public class Query {
 	public Query(String queryString)throws Exception
 	{
 		columNames=new SelectColumns();
-		restrictions=new ArrayList();
+		criteriaList=new ArrayList();
 		logicalOperator=new ArrayList<String>();
 		this.parseQuery(queryString);
 		headerRow=this.setHeaderRow();
@@ -56,7 +59,7 @@ public class Query {
 	
 	public Query parseQuery(String queryString)
 	{
-		String baseQuery=null,conditionQuery=null,selectcol=null;
+		String baseQuery=null,conditionQuery=null,selectedColumns=null;
 		
 		if(queryString.contains("order by"))
 		{
@@ -71,8 +74,8 @@ public class Query {
 			}
 			filePath=baseQuery.split("from")[1].trim();
 			baseQuery=baseQuery.split("from")[0].trim();
-			selectcol=baseQuery.split("select")[1].trim();
-			this.fieldsProcessing(selectcol);
+			selectedColumns=baseQuery.split("select")[1].trim();
+			this.selectColumnProcessing(selectedColumns);
 			hasOrderBy=true;
 		}
 		else if(queryString.contains("group by"))
@@ -88,8 +91,8 @@ public class Query {
 			}
 			filePath=baseQuery.split("from")[1].trim();
 			baseQuery=baseQuery.split("from")[0].trim();
-			selectcol=baseQuery.split("select")[1].trim();
-			this.fieldsProcessing(selectcol);
+			selectedColumns=baseQuery.split("select")[1].trim();
+			this.selectColumnProcessing(selectedColumns);
 			hasGroupBy=true;
 		}
 		else if(queryString.contains("where"))
@@ -100,16 +103,16 @@ public class Query {
 			filePath=baseQuery.split("from")[1].trim();
 			baseQuery=baseQuery.split("from")[0].trim();
 			this.relationalExpressionProcessing(conditionQuery);
-			selectcol=baseQuery.split("select")[1].trim();
-			this.fieldsProcessing(selectcol);
+			selectedColumns=baseQuery.split("select")[1].trim();
+			this.selectColumnProcessing(selectedColumns);
 			hasWhere=true;
 		}
 		else
 		{
 			baseQuery=queryString.split("from")[0].trim();
 			filePath=queryString.split("from")[1].trim();
-			selectcol=baseQuery.split("select")[1].trim();
-			this.fieldsProcessing(selectcol);
+			selectedColumns=baseQuery.split("select")[1].trim();
+			this.selectColumnProcessing(selectedColumns);
 			hasSimpleQuery=true;
 		}
 		
@@ -120,7 +123,7 @@ public class Query {
 	{
 		String oper[]={">=","<=",">","<","!=","="};
 		
-		String relationalQueries[]=conditionQuery.split("and|or");
+		String relationalQueries[]=conditionQuery.split("\\s+and\\s+|\\s+or\\s+");
 		
 		for(String relationQuery:relationalQueries)
 		{	
@@ -133,13 +136,13 @@ public class Query {
 					criteria.setColumn(relationQuery.split(operator)[0].trim());
 					criteria.setValue(relationQuery.split(operator)[1].trim());
 					criteria.setOperator(operator);
-					restrictions.add(criteria);
+					criteriaList.add(criteria);
 					break;
 				}
 			}
 		}
 		
-		if(restrictions.size()>1)
+		if(criteriaList.size()>1)
 			this.logicalOperatorStore(conditionQuery);
 	}
 	
@@ -193,7 +196,7 @@ public class Query {
 		return hasAggregate;
 	}
 
-	private void fieldsProcessing(String selectColumn)
+	private void selectColumnProcessing(String selectColumn)
 	{
 		if(selectColumn.trim().contains("*") && selectColumn.trim().length()==1)
 		{
@@ -205,10 +208,11 @@ public class Query {
 			
 			for(String column:columnList)
 			{
+				column=column.toLowerCase();
 				columNames.getColumns().add(column.trim());
 			}
 			
-			if(selectColumn.contains("sum") || selectColumn.contains("count")||selectColumn.contains("count(*)"))
+			if(selectColumn.contains("sum") ||selectColumn.contains("max")||selectColumn.contains("min")||selectColumn.contains("count")||selectColumn.contains("count(*)"))
 			{
 				hasAggregate=true;
 			}
@@ -227,6 +231,7 @@ public class Query {
 			int columnIndex=0;
 			for(String rowvalue:rowValues)
 			{
+				rowvalue=rowvalue.toLowerCase();
 				headerRow.put(rowvalue,columnIndex);
 				columnIndex++;
 			}

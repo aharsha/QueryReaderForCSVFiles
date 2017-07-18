@@ -11,10 +11,10 @@ public class QueryStatement {
 			try {
 				query = new Query(queryString);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
-			return new QueryProcessor(query).getCsvData();
+			return new FetchCsvData(query).getCsvData();
 		} 
 		
 		return null;

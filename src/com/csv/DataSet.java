@@ -3,6 +3,11 @@ import java.util.*;
 
 public class DataSet
 {
+	
+	private LinkedHashMap<String,Float> aggregateInfo;
+	
+
+
 	private List<DataRow> resultSet=new ArrayList();
 
 	public List<DataRow> getResultSet() 
@@ -14,6 +19,15 @@ public class DataSet
 	{
 		this.resultSet = resultSet;
 	}
+
+	public LinkedHashMap<String, Float> getAggregateInfo() {
+		return aggregateInfo;
+	}
+
+	public void setAggregateInfo(LinkedHashMap<String, Float> aggregateInfo) {
+		this.aggregateInfo = aggregateInfo;
+	}
 	
+
 	
 }
