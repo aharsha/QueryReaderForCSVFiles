@@ -9,6 +9,16 @@ public class DataSet
 
 
 	private List<DataRow> resultSet=new ArrayList();
+	
+	private LinkedHashMap<String,Float> groupByInfo;
+
+	public LinkedHashMap<String, Float> getGroupByInfo() {
+		return groupByInfo;
+	}
+
+	public void setGroupByInfo(LinkedHashMap<String, Float> groupByInfo) {
+		this.groupByInfo = groupByInfo;
+	}
 
 	public List<DataRow> getResultSet() 
 	{

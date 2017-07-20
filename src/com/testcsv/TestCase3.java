@@ -29,6 +29,7 @@ public class TestCase3 {
 		display("selectAllWithoutWhereTestCase",dataSet);
 		
 	}
+	
 
 	
 	@Test
@@ -40,6 +41,27 @@ public class TestCase3 {
 		
 	}
 	
+	@Test
+	public void selectSumColumnsWithWhereTestCase(){
+		
+		DataSet dataSet=queryStatement.executeQuery("select sum(salary) from d:/emp.csv where city=Bangalore");
+		assertNotNull(dataSet);
+		display("selectSumColumnsWithWhereTestCase",dataSet);
+		
+	}
+	
+	
+
+	@Test
+	public void selectColumnsWithoutWhereWithGroupBySumTestCase(){
+		
+		DataSet dataSet=queryStatement.executeQuery("select city,sum(salary) from d:/emp.csv group by city");
+		assertNotNull(dataSet);
+		display("selectColumnsWithoutWhereWithGroupByTestCase",dataSet);
+		
+	}
+	
+	/*
 	@Test
 	public void withWhereGreaterThanTestCase(){
 		
@@ -107,14 +129,7 @@ public class TestCase3 {
 		}
 		
 
-		@Test
-		public void selectSumColumnsWithWhereTestCase(){
-			
-			DataSet dataSet=queryStatement.executeQuery("select sum(salary) from d:/emp.csv where city=Bangalore");
-			assertNotNull(dataSet);
-			display("selectSumColumnsWithWhereTestCase",dataSet);
-			
-		}
+		
 		
 		@Test
 		public void selectMaxColumnsWithWhereTestCase(){
@@ -142,7 +157,7 @@ public class TestCase3 {
 			display("selectCountColumnsWithoutWhereTestCase",dataSet);
 			
 		}
-		/*
+		
 	@Test
 	public void selectCountColumnsWithoutWhereTestCase(){
 		
