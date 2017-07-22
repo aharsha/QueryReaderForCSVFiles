@@ -8,8 +8,12 @@ import java.util.regex.Pattern;
 
 public class Query {
 
-	private String filePath;
-	private String orderByColumn, groupByColumn;
+	private String filePath,orderByColumn, groupByColumn,aggregateFunctionName,aggregateFunctionColumnName;
+	
+	
+
+	
+
 	private SelectColumns columNames;
 	private List<Criteria> criteriaList;
 
@@ -18,6 +22,7 @@ public class Query {
 	private List<String> logicalOperator;
 	private HeaderRow headerRow;
 
+	
 	public List<Criteria> getCriteriaList() {
 		return criteriaList;
 	}
@@ -40,6 +45,14 @@ public class Query {
 
 	public void setColumNames(SelectColumns columnNames) {
 		this.columNames = columnNames;
+	}
+	
+	public String getAggregateFunctionName() {
+		return aggregateFunctionName;
+	}
+
+	public void setAggregateFunctionName(String aggregateFunctionName) {
+		this.aggregateFunctionName = aggregateFunctionName;
 	}
 
 	public String getOrderByColumn() {
@@ -147,6 +160,14 @@ public class Query {
 
 	public String getGroupByColumn() {
 		return groupByColumn;
+	}
+	
+	public String getAggregateFunctionColumnName() {
+		return aggregateFunctionColumnName;
+	}
+
+	public void setAggregateFunctionColumnName(String aggregateFunctionColumnName) {
+		this.aggregateFunctionColumnName = aggregateFunctionColumnName;
 	}
 
 	public boolean isHasGroupBy() {

@@ -55,7 +55,7 @@ public class TestCase3 {
 	@Test
 	public void selectColumnsWithoutWhereWithGroupBySumTestCase(){
 		
-		DataSet dataSet=queryStatement.executeQuery("select city,sum(salary) from d:/emp.csv group by city");
+		DataSet dataSet=queryStatement.executeQuery("select dept,max(salary) from d:/emp.csv group by dept");
 		assertNotNull(dataSet);
 		display("selectColumnsWithoutWhereWithGroupByTestCase",dataSet);
 		
@@ -229,7 +229,20 @@ public class TestCase3 {
 		System.out.println(testCaseName);
 		
 		System.out.println("================================================================");
-		if(dataSet.getAggregateInfo()==null)
+		if(dataSet.getGroupByInfo()!=null)
+		{
+			
+Set <String> groupByInfo= dataSet.getGroupByInfo().keySet();
+			
+			for(String groupByColName:groupByInfo)
+			{
+				System.out.print(groupByColName+"  \t");
+				System.out.println(dataSet.getGroupByInfo().get(groupByColName));
+				
+			}
+		}
+		else 
+		if(dataSet.getAggregateInfo()==null&&dataSet.getGroupByInfo()==null)
 		{
 		for(DataRow rowData:dataSet.getResultSet())
 		{
@@ -243,7 +256,7 @@ public class TestCase3 {
 			System.out.println();
 		}
 		}
-		else
+		else if(dataSet.getAggregateInfo()!=null&&dataSet.getGroupByInfo()==null)
 		{
 			Set <String> aggregateInfo= dataSet.getAggregateInfo().keySet();
 			
