@@ -21,7 +21,7 @@ public class TestCase3 {
 		queryStatement=new QueryStatement();
 	}
 	
-	@Test
+	//@Test
 	public void selectAllWithoutWhereTestCase(){
 		
 		DataSet dataSet=queryStatement.executeQuery("select * from d:/emp.csv");
@@ -32,7 +32,7 @@ public class TestCase3 {
 	
 
 	
-	@Test
+	//@Test
 	public void selectColumnsWithoutWhereTestCase(){
 		
 		DataSet dataSet=queryStatement.executeQuery("select city,dept,name from d:/emp.csv");
@@ -41,7 +41,7 @@ public class TestCase3 {
 		
 	}
 	
-	@Test
+	//@Test
 	public void selectSumColumnsWithWhereTestCase(){
 		
 		DataSet dataSet=queryStatement.executeQuery("select sum(salary) from d:/emp.csv where city=Bangalore");
@@ -52,7 +52,7 @@ public class TestCase3 {
 	
 	
 
-	@Test
+	//@Test
 	public void selectColumnsWithoutWhereWithGroupBySumTestCase(){
 		
 		DataSet dataSet=queryStatement.executeQuery("select dept,max(salary) from d:/emp.csv group by dept");
@@ -61,8 +61,8 @@ public class TestCase3 {
 		
 	}
 	
-	/*
-	@Test
+	
+//	@Test
 	public void withWhereGreaterThanTestCase(){
 		
 		DataSet dataSet=queryStatement.executeQuery("select city,name,salary from d:/emp.csv where salary>30000");
@@ -71,7 +71,7 @@ public class TestCase3 {
 		
 	}
 	
-	@Test
+	//@Test
 	public void withWhereLessThanTestCase(){
 		
 		DataSet dataSet=queryStatement.executeQuery("select city,name,salary from d:/emp.csv where salary<35000");
@@ -80,6 +80,17 @@ public class TestCase3 {
 		
 	}
 	
+	@Test
+	public void withWhereEqualAndNotEqualTestCase(){
+		
+		DataSet  dataSet=queryStatement.executeQuery("select city,name,salary from d:/emp.csv where city =Bangalore"
+				+ " or city = Kolkata");
+		assertNotNull(dataSet);
+		display("withWhereEqualAndNotEqualTestCase",dataSet);
+		
+	}
+	
+	/*
 	
 	@Test
 	public void withWhereLessThanOrEqualToTestCase(){
@@ -110,14 +121,7 @@ public class TestCase3 {
 	}
 	
 
-		@Test
-	public void withWhereEqualAndNotEqualTestCase(){
-		
-		DataSet  dataSet=queryStatement.executeQuery("select city,name,salary from d:/emp.csv where salary=30000 or salary!=39000");
-		assertNotNull(dataSet);
-		display("withWhereEqualAndNotEqualTestCase",dataSet);
-		
-	}
+	
 		
 		@Test
 		public void selectColumnsWithWhereWithOrderByTestCase(){
